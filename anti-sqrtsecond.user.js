@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Luogu Feed: Anti-SqrtSecond
 // @namespace    https://imken.moe/
-// @version      0.1.1
+// @version      0.1.2
 // @description  @SqrtSecond
 // @author       Imken Luo
 // @match        https://www.luogu.com.cn/
@@ -43,7 +43,6 @@
                             var src = imgElements[i].getAttribute('src');
                             var newAltText = 'AntiSqrt: ' + altText + ' | ' + src;
                             imgElements[i].setAttribute('alt', newAltText);
-                            imgElements[i].setAttribute('style', 'background: black; color: white;');
                             imgElements[i].setAttribute('vist', '1');
                         }
                     }
