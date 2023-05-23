@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Luogu Feed: Anti-SqrtSecond
 // @namespace    https://imken.moe/
-// @version      0.1
+// @version      0.1.1
 // @description  @SqrtSecond
 // @author       Imken Luo
 // @match        https://www.luogu.com.cn/
@@ -10,38 +10,7 @@
 // @grant        none
 // ==/UserScript==
 
-function bfs(node)
-{
-    let queue = [node]
-    while (queue.length) {
-        let node = queue.shift();
-        // console.log(node.tagName+"-"+node.className);
-        if (node.getAttribute('vist')) continue;
-        if ((node.tagName == 'A' && node.innerHTML == "")) {
-            let new_node = document.createElement('span');
-            new_node.setAttribute('style', 'background-color: black; color: white;');
-            new_node.innerText = node.getAttribute('href');
-            node.parentNode.append(new_node);
-            node.setAttribute('vist', '1');
-        } else if ((node.tagName == 'IMG' && !node.getAttribute('src').startsWith('http'))) {
-            // TODO
-            let new_node = document.createElement('span');
-            new_node.setAttribute('style', 'background-color: black; color: white;');
-            new_node.innerText = node.getAttribute('src');
-            node.parentNode.append(new_node);
-            node.setAttribute('vist', '1');
-        }
-        if (!node.children.length) {
-            continue;
-        }
-        Array.from(node.children).forEach( item =>{
-            queue.push(item)
-        })
-    }
-}
-
 (function() {
-    'use strict';
     // 选择需要观察变动的节点
     const targetNode = document.getElementById('feed');
     if (targetNode) {
@@ -54,7 +23,31 @@ function bfs(node)
             for (let mutation of mutationsList) {
                 if (mutation.type === 'childList') {
                     console.log('Benben upudated!');
-                    bfs(document.getElementById('feed'));
+                    var eles = document.querySelectorAll('.feed-comment');
+                    console.log(eles);
+                    for (var i in eles) {
+                        if (eles[i].innerHTML) {
+                            eles[i].innerHTML = eles[i].innerHTML.replace(/<a\s+[^>]*href="([^"]*)"[^>]*>(\s*|&nbsp;)<\/a>/g, function(match, href) {
+                                // 替换为内容为 href 的 <span> 标签
+                                return '<span style="background-color: black; color: white;">' + href + '</span>';
+                            });
+                        }
+                    }
+                    // 获取所有图片元素
+                    var imgElements = document.querySelectorAll('img');
+
+                    // 遍历每个图片元素
+                    for (i in imgElements) {
+                        if (imgElements[i].getAttribute && !imgElements[i].getAttribute('vist')) {
+                            var altText = imgElements[i].getAttribute('alt');
+                            var src = imgElements[i].getAttribute('src');
+                            var newAltText = 'AntiSqrt: ' + altText + ' | ' + src;
+                            imgElements[i].setAttribute('alt', newAltText);
+                            imgElements[i].setAttribute('style', 'background: black; color: white;');
+                            imgElements[i].setAttribute('vist', '1');
+                        }
+                    }
+
                 }
             }
         };
