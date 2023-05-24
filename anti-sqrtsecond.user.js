@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Luogu Feed: Anti-SqrtSecond
 // @namespace    https://imken.moe/
-// @version      0.1.2
-// @description  @SqrtSecond
+// @version      0.1.3
+// @description  某些人总是喜欢发一些隐藏犇犇 e.g. `[](你被骗了)`
 // @author       Imken Luo
 // @match        https://www.luogu.com.cn/
 // @match        https://www.luogu.com.cn/?*
@@ -14,7 +14,6 @@
     // 选择需要观察变动的节点
     const targetNode = document.getElementById('feed');
     if (targetNode) {
-        console.log(targetNode)
         // 观察器的配置（需要观察什么变动）
         const config = { attributes: false, childList: true, subtree: false };
 
@@ -22,27 +21,33 @@
         const callback = function(mutationsList, observer) {
             for (let mutation of mutationsList) {
                 if (mutation.type === 'childList') {
-                    console.log('Benben upudated!');
-                    var eles = document.querySelectorAll('.feed-comment');
-                    console.log(eles);
-                    for (var i in eles) {
-                        if (eles[i].innerHTML) {
-                            eles[i].innerHTML = eles[i].innerHTML.replace(/<a\s+[^>]*href="([^"]*)"[^>]*>(\s*|&nbsp;)<\/a>/g, function(match, href) {
+                    // 选择所有犇犇下的文字
+                    const urlElements = document.querySelectorAll('.feed-comment p');
+
+                    // 遍历每一个元素
+                    for (let i in urlElements) {
+                        if (urlElements[i].innerHTML && !urlElements[i].getAttribute('vist')) {
+                            urlElements[i].setAttribute('vist', '1');
+                            // 正则表达式替换
+                            urlElements[i].innerHTML = urlElements[i].innerHTML.replace(/<a\s+[^>]*href="([^"]*)"[^>]*>(\s*|&nbsp;)<\/a>/g, function(match, href) {
                                 // 替换为内容为 href 的 <span> 标签
-                                return '<span style="background-color: black; color: white;">' + href + '</span>';
+                                return '<span style="background-color: black; color: white;">' + decodeURIComponent(href) + '</span>';
                             });
                         }
                     }
+
                     // 获取所有图片元素
-                    var imgElements = document.querySelectorAll('img');
+                    const imgElements = document.querySelectorAll('.feed-comment img');
 
                     // 遍历每个图片元素
-                    for (i in imgElements) {
+                    for (let i in imgElements) {
                         if (imgElements[i].getAttribute && !imgElements[i].getAttribute('vist')) {
                             var altText = imgElements[i].getAttribute('alt');
                             var src = imgElements[i].getAttribute('src');
-                            var newAltText = 'AntiSqrt: ' + altText + ' | ' + src;
+                            src = decodeURIComponent(src);
+                            var newAltText = altText + ' | ' + src;
                             imgElements[i].setAttribute('alt', newAltText);
+                            imgElements[i].setAttribute('style', 'background: gray; color: white;');
                             imgElements[i].setAttribute('vist', '1');
                         }
                     }
