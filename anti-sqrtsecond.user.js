@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Luogu Feed: Anti-SqrtSecond
 // @namespace    https://imken.moe/
-// @version      0.1.4.0
+// @version      0.1.4.1
 // @description  某些人总是喜欢发一些隐藏犇犇 e.g. `[](你被骗了)`
 // @author       Imken Luo
 // @match        https://www.luogu.com.cn/
@@ -13,6 +13,8 @@
 const keywordMap = {
     'BV1GJ411x7h7': 'RickRoll',
     'milime.top': 'RickRoll',
+    'rrHrxMt': 'RickRoll',
+    '192d9a98d782d9c74c96f09db9378d93.mp4': 'RickRoll',
     'BV12x411y7SN': '洛天依 - 凉雨',
 };
 
