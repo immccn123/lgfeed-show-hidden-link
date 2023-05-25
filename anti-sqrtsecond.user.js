@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Luogu Feed: Anti-SqrtSecond
 // @namespace    https://imken.moe/
-// @version      0.1.3
+// @version      0.1.4.0
 // @description  某些人总是喜欢发一些隐藏犇犇 e.g. `[](你被骗了)`
 // @author       Imken Luo
 // @match        https://www.luogu.com.cn/
@@ -9,6 +9,12 @@
 // @icon         https://www.luogu.com.cn/favicon.ico
 // @grant        none
 // ==/UserScript==
+
+const keywordMap = {
+    'BV1GJ411x7h7': 'RickRoll',
+    'milime.top': 'RickRoll',
+    'BV12x411y7SN': '洛天依 - 凉雨',
+};
 
 (function() {
     // 选择需要观察变动的节点
@@ -52,6 +58,20 @@
                         }
                     }
 
+                    const linkElements = document.querySelectorAll('.feed-comment p a');
+                    for (let i in linkElements) {
+                        if (!linkElements[i].href) break;
+                        if (linkElements[i].getAttribute('vist')) continue;
+                        let link = linkElements[i].href;
+                        for (let keyword in keywordMap) {
+                            if (link.includes(keyword)) {
+                                linkElements[i].innerHTML += '<span style="background-color: yellow; font-family: monospace; color: red;"> [Warn: ' + keywordMap[keyword] + ']</span>';
+                                linkElements[i].style['background-color'] = 'yellow';
+                                break;
+                            }
+                        }
+                        linkElements[i].setAttribute('vist', '1');
+                    }
                 }
             }
         };
