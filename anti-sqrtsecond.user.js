@@ -2,7 +2,7 @@
 // @name            Luogu Feed: Anti-SqrtSecond
 // @name:zh         洛谷犇犇反诈工具
 // @namespace       https://imken.moe/
-// @version         0.1.5.1
+// @version         0.1.5.2
 // @description     Luogu Feed hidden link display tool, rickroll display tool.
 // @description:zh  洛谷犇犇隐藏链接显示工具、诈骗显示工具。
 // @author          Imken Luo
@@ -16,6 +16,13 @@
 
 const keywordMap = {
     'BV1GJ411x7h7': 'RickRoll',
+    'BV1va411w7aM': 'RickRoll',
+    'BV1BP4y1G78b': 'RickRoll',
+    'BV1mu411U7GU': 'RickRoll',
+    'BV1Px411w7FH': 'RickRoll',
+    'BV1Ti4y1f7td': 'RickRoll',
+    'av156766': 'RickRoll',
+    'id=5221167': 'RickRoll', //  Netease Music
     'milime.top': 'RickRoll',
     'rrHrxMt': 'RickRoll',
     '192d9a98d782d9c74c96f09db9378d93.mp4': 'RickRoll',
