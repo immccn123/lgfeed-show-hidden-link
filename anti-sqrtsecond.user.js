@@ -2,7 +2,7 @@
 // @name            Luogu Feed: Anti-SqrtSecond
 // @name:zh         洛谷犇犇反诈工具
 // @namespace       https://imken.moe/
-// @version         0.1.5.2
+// @version         0.1.6.0
 // @description     Luogu Feed hidden link display tool, rickroll display tool.
 // @description:zh  洛谷犇犇隐藏链接显示工具、诈骗显示工具。
 // @author          Imken Luo
@@ -29,6 +29,19 @@ const keywordMap = {
     'BV12x411y7SN': '洛天依 - 凉雨',
     'BV1sx411S7rN': '天依教你甜甜圈的正确用法',
 };
+
+const linkTextRegex = /^(https?:\/\/)?([a-z0-9-]+\.){1,}[a-z]{2,}(\/.*)?$/i;
+
+// 去除字符串末尾的斜杠
+function removeTrailingSlash(str) {
+    return str.replace(/\/$/, '');
+}
+
+// 判断字符串是否看起来像一个链接
+function isLinkLike(str) {
+    return linkTextRegex.test(str);
+}
+
 
 (function() {
     // 选择需要观察变动的节点
@@ -76,18 +89,24 @@ const keywordMap = {
                     for (let i in linkElements) {
                         if (!linkElements[i].href) break;
                         if (linkElements[i].getAttribute('vist')) continue;
-                        let link = linkElements[i].href;
+                        let link = linkElements[i].getAttribute('href');
                         let text = linkElements[i].innerText;
-                        let flag = 1;
+                        let isKeywordMatched = 0;
                         for (let keyword in keywordMap) {
                             if (link.includes(keyword)) {
                                 linkElements[i].innerHTML += '<span style="background-color: yellow; font-family: monospace; color: red;"> [Warn: ' + keywordMap[keyword] + ']</span>';
                                 linkElements[i].style['background-color'] = 'yellow';
-                                flag = 0;
+                                isKeywordMatched = 1;
                                 break;
                             }
                         }
-                        if (flag && (text.startsWith('http://') || text.startsWith('https://')) && (link != text)) {
+
+                        // 去除链接文字和 href 末尾的斜杠
+                        var cleanedText = removeTrailingSlash(text);
+                        var cleanedHref = removeTrailingSlash(link);
+
+                        // 检查链接文字和 href（去除末尾斜杠后）是否不同，并且链接文字看起来是一个链接
+                        if (!isKeywordMatched && cleanedText !== cleanedHref && isLinkLike(cleanedText)) {
                             linkElements[i].innerHTML += '<span style="background-color: yellow; font-family: monospace; color: red;"> [Warn: 链接不匹配]</span>';
                             linkElements[i].style['background-color'] = 'yellow';
                         }
