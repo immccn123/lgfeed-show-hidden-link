@@ -2,7 +2,7 @@
 // @name            Luogu Feed: Anti-SqrtSecond
 // @name:zh         洛谷犇犇反诈工具
 // @namespace       https://imken.moe/
-// @version         0.1.6.0
+// @version         0.1.7.0
 // @description     Luogu Feed hidden link display tool, rickroll display tool.
 // @description:zh  洛谷犇犇隐藏链接显示工具、诈骗显示工具。
 // @author          Imken Luo
@@ -14,6 +14,9 @@
 // @contributionURL https://sponsor.imken.moe/
 // ==/UserScript==
 
+//// *请注意，更新之前请备份您自定义的关键词列表！！！* ////
+//// *请注意，更新之前请备份您自定义的关键词列表！！！* ////
+//// *请注意，更新之前请备份您自定义的关键词列表！！！* ////
 const keywordMap = {
     'BV1GJ411x7h7': 'RickRoll',
     'BV1va411w7aM': 'RickRoll',
@@ -75,10 +78,11 @@ function isLinkLike(str) {
                     // 遍历每个图片元素
                     for (let i in imgElements) {
                         if (imgElements[i].getAttribute && !imgElements[i].getAttribute('vist')) {
-                            var altText = imgElements[i].getAttribute('alt');
-                            var src = imgElements[i].getAttribute('src');
+                            let altText = imgElements[i].getAttribute('alt');
+                            let src = imgElements[i].getAttribute('src');
+                            let title = imgElements[i].getAttribute('title');
+                            let newAltText = altText + ' | ' + src + (title ? ' | ' + title : '');
                             src = decodeURIComponent(src);
-                            var newAltText = altText + ' | ' + src;
                             imgElements[i].setAttribute('alt', newAltText);
                             imgElements[i].setAttribute('style', 'background: gray; color: white;');
                             imgElements[i].setAttribute('vist', '1');
