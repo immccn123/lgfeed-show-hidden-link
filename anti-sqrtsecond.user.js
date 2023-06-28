@@ -2,7 +2,7 @@
 // @name            Luogu Feed: Anti-SqrtSecond
 // @name:zh         洛谷犇犇反诈工具
 // @namespace       https://imken.moe/
-// @version         0.1.7.0
+// @version         0.1.8.0
 // @description     Luogu Feed hidden link display tool, rickroll display tool.
 // @description:zh  洛谷犇犇隐藏链接显示工具、诈骗显示工具。
 // @author          Imken Luo
@@ -33,6 +33,42 @@ const keywordMap = {
     'BV1sx411S7rN': '天依教你甜甜圈的正确用法',
 };
 
+// 将字符串转换为合法的类名
+function toValidClassName(str) {
+    str = str.replace(/[^a-zA-Z0-9_-]/g, '-');
+    if (/^\d/.test(str)) {
+        str = '-' + str;
+    }
+    return str;
+}
+
+// 生成需要的 CSS
+function genCSS(keywordMap) {
+    let res = ''
+    res += `.ass-warn::after {
+        background-color: yellow;
+        font-family: monospace;
+        color: red;
+        margin-left: 0.25em;
+    }`;
+    res += `.ass-unmatch::after {
+        content: '[Warn: 链接不匹配]';
+    }`;
+    for (let i in keywordMap) {
+        res += `.${toValidClassName(`ass-${i}`)}::after {
+            content: '[Warn: ${keywordMap[i]}]';
+        }`;
+    }
+    return res;
+}
+
+// 将 CSS 注入到网页
+function addCSS(css) {
+    let style = document.createElement('style');
+    style.innerHTML = css;
+    document.head.appendChild(style);
+}
+
 const linkTextRegex = /^(https?:\/\/)?([a-z0-9-]+\.){1,}[a-z]{2,}(\/.*)?$/i;
 
 // 去除字符串末尾的斜杠
@@ -50,6 +86,9 @@ function isLinkLike(str) {
     // 选择需要观察变动的节点
     const targetNode = document.getElementById('feed');
     if (targetNode) {
+
+        addCSS(genCSS(keywordMap));
+
         // 观察器的配置（需要观察什么变动）
         const config = { attributes: false, childList: true, subtree: false };
 
@@ -98,7 +137,8 @@ function isLinkLike(str) {
                         let isKeywordMatched = 0;
                         for (let keyword in keywordMap) {
                             if (link.includes(keyword)) {
-                                linkElements[i].innerHTML += '<span style="background-color: yellow; font-family: monospace; color: red;"> [Warn: ' + keywordMap[keyword] + ']</span>';
+                                linkElements[i].classList.add('ass-warn');
+                                linkElements[i].classList.add(toValidClassName(`ass-${keyword}`));
                                 linkElements[i].style['background-color'] = 'yellow';
                                 isKeywordMatched = 1;
                                 break;
@@ -111,7 +151,8 @@ function isLinkLike(str) {
 
                         // 检查链接文字和 href（去除末尾斜杠后）是否不同，并且链接文字看起来是一个链接
                         if (!isKeywordMatched && cleanedText !== cleanedHref && isLinkLike(cleanedText)) {
-                            linkElements[i].innerHTML += '<span style="background-color: yellow; font-family: monospace; color: red;"> [Warn: 链接不匹配]</span>';
+                            linkElements[i].classList.add("ass-warn");
+                            linkElements[i].classList.add("ass-unmatch");
                             linkElements[i].style['background-color'] = 'yellow';
                         }
                         linkElements[i].setAttribute('vist', '1');
