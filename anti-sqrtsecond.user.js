@@ -1,17 +1,13 @@
 // ==UserScript==
-// @name            Luogu Feed: Anti-SqrtSecond
-// @name:zh         洛谷犇犇反诈工具
-// @namespace       https://imken.moe/
-// @version         0.1.8.0
-// @description     Luogu Feed hidden link display tool, rickroll display tool.
-// @description:zh  洛谷犇犇隐藏链接显示工具、诈骗显示工具。
+// @name            Luogu Feed: Show hidden link
+// @namespace       https://imken.link/lfshl
+// @version         0.1.8.1
+// @description     Luogu Feed hidden link display tool with keyword highlight.
 // @author          Imken Luo
 // @match           https://www.luogu.com.cn/
 // @match           https://www.luogu.com.cn/?*
 // @icon            https://www.luogu.com.cn/favicon.ico
 // @license         GPL-3.0-or-later
-// @supportURL      https://github.com/immccn123/anti-sqrtsecond/issues
-// @contributionURL https://sponsor.imken.moe/
 // ==/UserScript==
 
 //// *请注意，更新之前请备份您自定义的关键词列表！！！* ////
@@ -29,8 +25,6 @@ const keywordMap = {
     'milime.top': 'RickRoll',
     'rrHrxMt': 'RickRoll',
     '192d9a98d782d9c74c96f09db9378d93.mp4': 'RickRoll',
-    'BV12x411y7SN': '洛天依 - 凉雨',
-    'BV1sx411S7rN': '天依教你甜甜圈的正确用法',
 };
 
 // 将字符串转换为合法的类名
@@ -167,3 +161,5 @@ function isLinkLike(str) {
         observer.observe(targetNode, config);
     }
 })();
+
+/// It's end. That's it.
